@@ -31,3 +31,27 @@ def decrypt_file(input_file, output_file, shift):
 
     with open(output_file, 'w') as f:
         f.write(decrypted_text)
+
+def main():
+    while True:
+        choice = input("Enter 'E' for encryption, 'D' for decryption, or 'exit' to quit: ")
+
+        if choice == 'exit':
+            break
+        elif choice == 'E':
+            input_file = input("Enter the input file name: ")
+            output_file = input("Enter the output file name: ")
+            shift = int(input("Enter the shift value: "))
+            encrypt_file(input_file, output_file, shift)
+            print("Encryption complete.")
+        elif choice == 'D':
+            input_file = input("Enter the input file name: ")
+            output_file = input("Enter the output file name: ")
+            shift = int(input("Enter the shift value: "))
+            decrypt_file(input_file, output_file, shift)
+            print("Decryption complete.")
+        else:
+            print("Invalid choice. Please enter 'E', 'D', or 'exit'.")
+
+if __name__ == "__main__":
+    main()
