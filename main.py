@@ -1,33 +1,50 @@
-def caesar_cipher(text, shift, encrypt=True):
-    def shift_char(char):
-        if char.isalpha():
-            base = ord('A') if char.isupper() else ord('a')
-            shifted = (ord(char) - base + shift) % 26
-            return chr(shifted + base)
-        return char
+def encrypt(raw_text, key):
+    encrypted_text = []
 
-    text = ''.join(map(shift_char, text))
+    for char in raw_text:
+        if char.isupper():
+            encrypted_char = chr((ord(char) - ord('A') + key) % 26 + ord('A'))
+        elif char.islower():
+            encrypted_char = chr((ord(char) - ord('a') + key) % 26 + ord('a'))
+        else:
+            encrypted_char = char
 
-    if encrypt:
-        return text
-    else:
-        shift = -shift
-        return ''.join(map(shift_char, text))
+        encrypted_text.append(encrypted_char)
 
-def encrypt_file(input_file, output_file, shift):
+    return ''.join(encrypted_text)
+
+
+def decrypt(encrypted_text, key):
+    decrypted_text = []
+
+    for char in encrypted_text:
+        if char.isupper():
+            decrypted_char = chr((ord(char) - ord('A') - key) % 26 + ord('A'))
+        elif char.islower():
+            decrypted_char = chr((ord(char) - ord('a') - key) % 26 + ord('a'))
+        else:
+            decrypted_char = char
+
+        decrypted_text.append(decrypted_char)
+
+    return ''.join(decrypted_text)
+
+
+
+def encrypt_file(input_file, output_file, key):
     with open(input_file, 'r') as f:
         raw_text = f.read()
 
-    encrypted_text = caesar_cipher(raw_text, shift)
+    encrypted_text = encrypt(raw_text, key)
 
     with open(output_file, 'w') as f:
         f.write(encrypted_text)
 
-def decrypt_file(input_file, output_file, shift):
+def decrypt_file(input_file, output_file, key):
     with open(input_file, 'r') as f:
         encrypted_text = f.read()
 
-    decrypted_text = caesar_cipher(encrypted_text, shift, encrypt=False)
+    decrypted_text = decrypt(encrypted_text, key)
 
     with open(output_file, 'w') as f:
         f.write(decrypted_text)
@@ -41,14 +58,14 @@ def main():
         elif choice == 'E':
             input_file = input("Enter the input file name: ")
             output_file = input("Enter the output file name: ")
-            shift = int(input("Enter the shift value: "))
-            encrypt_file(input_file, output_file, shift)
+            key = int(input("Enter the encryption key: "))
+            encrypt_file(input_file, output_file, key)
             print("Encryption complete.")
         elif choice == 'D':
             input_file = input("Enter the input file name: ")
             output_file = input("Enter the output file name: ")
-            shift = int(input("Enter the shift value: "))
-            decrypt_file(input_file, output_file, shift)
+            key = int(input("Enter the decryption key: "))
+            decrypt_file(input_file, output_file, key)
             print("Decryption complete.")
         else:
             print("Invalid choice. Please enter 'E', 'D', or 'exit'.")
